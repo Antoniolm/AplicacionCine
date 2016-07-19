@@ -33,13 +33,14 @@ import javax.swing.border.MatteBorder;
 
 /**
  *
- * @author antonio
+ * @author ANTONIO DAVID LÓPEZ MACHADO
  */
 public class Application {
     
     public Application(){
         
-        final JFrame frame = new JFrame("Aplicación");
+        final JFrame frame = new JFrame("Aplicación de cine y series");
+        //Este jpanel nos servira para hacer despues el cambio de cards(una para pelis y otra para series)
         final JPanel cards = new JPanel(new CardLayout());
         Dimension dm = new Dimension(1250, 800);
         frame.setPreferredSize(dm);
@@ -47,35 +48,42 @@ public class Application {
         JPanel panelbotones = new JPanel();
 
 
-       panelbotones.setLayout(new BoxLayout(panelbotones, BoxLayout.Y_AXIS));
+        //Panel donde se añadiran todos los botones principales
+        panelbotones.setLayout(new BoxLayout(panelbotones, BoxLayout.Y_AXIS));
 
-
+        //Boton para ver las peliculas
         JButton botonpeliculas = new JButton("  Peliculas  ");
         Dimension boton = new Dimension(50, 50);
         botonpeliculas.setPreferredSize(boton);
        
-        
-        
+        //Boton para ver las series
         JButton botonseries = new JButton("    Series     ");
 
-
+        //Añadimos ambos botones
         panelbotones.add(botonpeliculas, BorderLayout.CENTER);
         panelbotones.add(botonseries);
+        //Añadimos dos nuevos botones para vistas y peliculas
+        //a determinar
         panelbotones.add(new JButton("    Vistas     "));
         panelbotones.add(new JButton("Pendientes"));
 
+        //Añadimos a la interfaz el panel de botones
         frame.add(panelbotones, BorderLayout.WEST);
         frame.add(cards, BorderLayout.CENTER);
+        
+        //Creamos la zona de buscador
         JPanel Buscador = new JPanel();
         Buscador.add(new JLabel("Buscador:"));
         Dimension dimbusca = new Dimension(0, 40);
         Buscador.setPreferredSize(dimbusca);
 
+        //Campo de texto para realizar la busqueda
         final JTextField campobus = new JTextField(20);
         Buscador.add(campobus);
-
+        //Boton para realizar la busqueda
         JButton botonbuscar = new JButton("Buscar");
-       
+        
+       //Añadimos ambos elementos al buscador y añadimos el buscador a la interfaz
         Buscador.add(botonbuscar);
         frame.add(Buscador, BorderLayout.NORTH);
         frame.pack();
