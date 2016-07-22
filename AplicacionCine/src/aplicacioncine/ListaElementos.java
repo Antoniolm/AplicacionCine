@@ -23,7 +23,8 @@ import javax.swing.border.MatteBorder;
 public class ListaElementos extends JPanel{
      private JPanel mainList;
         private ArrayList<String> peliculas;
-        public ListaElementos(int tam) throws IOException{
+        public ListaElementos(int numElem) throws IOException{
+            int elemPorFila=9; //numero de elementos por cada fila
             ArrayList<Elemento> linea= new ArrayList<Elemento>();
             setLayout(new BorderLayout());
             mainList = new JPanel(new GridBagLayout());
@@ -36,13 +37,16 @@ public class ListaElementos extends JPanel{
             mainList.add(new JPanel(), gbc);
             add(new JScrollPane(mainList)); //Añadimos nuestro mainlist al objeto
 
-            
-            for(int i=0;i<tam;i++){
+            //int resto=numElem%elemPorFila;
+            //int nFilas=numElem/elemPorFila;
+            for(int i=0;i<numElem;i=i+elemPorFila){
                 JPanel panel = new JPanel();
                 linea.clear();
+                
                 //Creamos una fila
-                for(int j=0;j<10;j++){                    
-                    panel.add((new Elemento("prueba"+i)).getelemento());
+                for(int j=0;j<elemPorFila ;j++){
+                    //if(i!=(nFilas*elemPorFila) || j<resto)
+                        panel.add((new Elemento("prueba"+j)).getelemento());
                 }
                 panel.setBorder(new MatteBorder(0, 0, 1, 0, Color.GRAY));
                 gbc = new GridBagConstraints();

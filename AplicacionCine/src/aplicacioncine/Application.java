@@ -12,6 +12,7 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -42,38 +43,44 @@ public class Application {
         final JFrame frame = new JFrame("Aplicación de cine y series");
         //Este jpanel nos servira para hacer despues el cambio de cards(una para pelis y otra para series)
         CardLayout cardLayout= new CardLayout();
-        final JPanel cards = new JPanel(cardLayout);
+        JPanel cards = new JPanel(cardLayout);
         Dimension dm = new Dimension(1250, 800);
         frame.setPreferredSize(dm);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         JPanel panelbotones = new JPanel();
 
         //Añadimos los elementos al CardLayout
-        ListaElementos elementos = new ListaElementos(7);
+        ListaElementos elementos = new ListaElementos(9);
         cards.add(elementos, "peliculas");
         cardLayout.show(cards, "peliculas");
         
-
         //Panel donde se añadiran todos los botones principales
         panelbotones.setLayout(new BoxLayout(panelbotones, BoxLayout.Y_AXIS));
 
         //Boton para ver las peliculas
-        JButton botonpeliculas = new JButton("  Peliculas  ");
-        Dimension boton = new Dimension(50, 50);
-        botonpeliculas.setPreferredSize(boton);
+        JButton botonPeliculas = new JButton("Peliculas");
+        botonPeliculas.setBounds(new Rectangle(0,40,150,40));
        
         //Boton para ver las series
-        JButton botonseries = new JButton("    Series     ");
+        JButton botonSeries = new JButton("Series");
+        botonSeries.setBounds(new Rectangle(0,80,150,40));
 
-        //Añadimos ambos botones
-        panelbotones.add(botonpeliculas, BorderLayout.CENTER);
-        panelbotones.add(botonseries);
+        
         //Añadimos dos nuevos botones para vistas y peliculas
         //a determinar
-        panelbotones.add(new JButton("    Vistas     "));
+        JButton botonVistasSeries = new JButton("Vistas");
+        botonVistasSeries.setBounds(new Rectangle(0,120,150,40));
         panelbotones.add(new JButton("Pendientes"));
+        
+        //Añadimos los botones al panel
+        panelbotones.add(botonPeliculas);
+        panelbotones.add(botonSeries);
+        panelbotones.add(botonVistasSeries);
 
         //Añadimos a la interfaz el panel de botones
+        Dimension dimPanelBoton =new Dimension(150,80);
+        panelbotones.setPreferredSize(dimPanelBoton);
+        panelbotones.setLayout(null);
         frame.add(panelbotones, BorderLayout.WEST);
         frame.add(cards, BorderLayout.CENTER);
         
