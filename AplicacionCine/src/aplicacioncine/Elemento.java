@@ -27,7 +27,9 @@ public class Elemento {
     
    
     public Elemento(String elemento) throws IOException{
+        nombre=elemento;
         panelElemento = new JPanel();
+        
         Dimension dm=new Dimension(105,150); //Le damos la dimension que queramos
         panelElemento.setPreferredSize(dm);
         panelElemento.setBorder(new MatteBorder(1, 1, 1, 1, Color.GRAY));

@@ -37,16 +37,22 @@ import javax.swing.border.MatteBorder;
  */
 public class Application {
     
-    public Application(){
+    public Application() throws IOException{
         
         final JFrame frame = new JFrame("Aplicación de cine y series");
         //Este jpanel nos servira para hacer despues el cambio de cards(una para pelis y otra para series)
-        final JPanel cards = new JPanel(new CardLayout());
+        CardLayout cardLayout= new CardLayout();
+        final JPanel cards = new JPanel(cardLayout);
         Dimension dm = new Dimension(1250, 800);
         frame.setPreferredSize(dm);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         JPanel panelbotones = new JPanel();
 
+        //Añadimos los elementos al CardLayout
+        ListaElementos elementos = new ListaElementos(7);
+        cards.add(elementos, "peliculas");
+        cardLayout.show(cards, "peliculas");
+        
 
         //Panel donde se añadiran todos los botones principales
         panelbotones.setLayout(new BoxLayout(panelbotones, BoxLayout.Y_AXIS));

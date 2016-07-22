@@ -17,8 +17,8 @@ public class AplicacionCine {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws IOException {
-        //Application miAplicacion=new Application();
-        Elemento miElemento=new Elemento("prueba");
+        Application miAplicacion=new Application();
+        
     }
     
 }
