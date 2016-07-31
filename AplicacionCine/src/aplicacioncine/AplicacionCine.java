@@ -2,6 +2,7 @@
 package aplicacioncine;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 /**
  *
@@ -12,7 +13,7 @@ public class AplicacionCine {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, SQLException {
         Application miAplicacion=new Application();
         
     }

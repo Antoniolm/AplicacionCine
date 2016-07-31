@@ -15,6 +15,8 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,8 +35,8 @@ import javax.swing.border.MatteBorder;
  * @author ANTONIO DAVID LÓPEZ MACHADO
  */
 public class Application {
-    
-    public Application() throws IOException{
+    DataBase baseDatos;
+    public Application() throws IOException, SQLException{
         
         final JFrame frame = new JFrame("Aplicación de cine y series");
         //Este jpanel nos servira para hacer despues el cambio de cards(una para pelis y otra para series)
@@ -46,10 +48,8 @@ public class Application {
         JPanel panelbotones = new JPanel();
 
         //Abrimos la bd
-        DataBase baseDatos=new DataBase();
-        
-        
-        
+        baseDatos=new DataBase();    
+        //baseDatos.operacion("INSERT INTO peliculas (nombre,imagen,anio,descripcion) VALUES ('"+prueba+"','peliculas/"+prueba+"',1900,'This is a description' );");     
         
         //Añadimos los elementos al CardLayout
         ListaElementos elementos = new ListaElementos(9);
