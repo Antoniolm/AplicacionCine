@@ -7,6 +7,8 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -22,9 +24,9 @@ import javax.swing.border.MatteBorder;
 public class ListaElementos extends JPanel{
      private JPanel mainList;
         private ArrayList<String> peliculas;
-        public ListaElementos(int numElem) throws IOException{
+        public ListaElementos(ResultSet lista,int tamTotal) throws IOException, SQLException{
             int elemPorFila=9; //numero de elementos por cada fila
-            ArrayList<Elemento> linea= new ArrayList<Elemento>();
+            
             setLayout(new BorderLayout());
             mainList = new JPanel(new GridBagLayout());
             //Realizamos la configuracion 
@@ -36,25 +38,38 @@ public class ListaElementos extends JPanel{
             mainList.add(new JPanel(), gbc);
             add(new JScrollPane(mainList)); //Añadimos nuestro mainlist al objeto
 
-            //int resto=numElem%elemPorFila;
-            //int nFilas=numElem/elemPorFila;
-            for(int i=0;i<numElem;i=i+elemPorFila){
-                JPanel panel = new JPanel();
-                linea.clear();
+            //Este entero nos permitira hacer las lineas en las que va dividiendose
+            //la lista de elementos
+            int peliActualFila=0;
+            JPanel panel = new JPanel();
+            
+            int totalActual=0;
+            System.out.println("tamTotal : "+tamTotal);
+            
+            //Recorremos el numero de elementos
+            while( lista.next() ){
                 
-                //Creamos una fila
-                for(int j=0;j<elemPorFila ;j++){
-                    //if(i!=(nFilas*elemPorFila) || j<resto)
-                        panel.add((new Elemento("prueba"+j)).getelemento());
+                //mientras no este la linea completa
+                if(peliActualFila!=elemPorFila && totalActual!=tamTotal){
+                        peliActualFila++;
+                        panel.add((new Elemento(lista.getString("nombre"))).getelemento());
                 }
-                panel.setBorder(new MatteBorder(0, 0, 1, 0, Color.GRAY));
-                gbc = new GridBagConstraints();
-                gbc.gridwidth = GridBagConstraints.REMAINDER;
-                gbc.gridx = GridBagConstraints.NORTH;
-                //La insertamos en nuestro jpanel
-                mainList.add(panel, gbc, 0);
-                
+                else{ //cuando lo esta la añadimos
+                    peliActualFila=1;
+                    panel.setBorder(new MatteBorder(0, 0, 1, 0, Color.GRAY));
+                    gbc = new GridBagConstraints();
+                    gbc.gridwidth = GridBagConstraints.REMAINDER;
+                    gbc.gridx = GridBagConstraints.NORTH;
+                    //La insertamos en nuestro jpanel
+                    mainList.add(panel, gbc, 0);
+                    panel = new JPanel();
+                    panel.add((new Elemento(lista.getString("nombre"))).getelemento());
+                }
+                totalActual++;
             }
+            
+            System.out.println("totalActual :"+totalActual);
+            
             validate();
             repaint();
         }

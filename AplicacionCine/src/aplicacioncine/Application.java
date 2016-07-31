@@ -51,8 +51,11 @@ public class Application {
         baseDatos=new DataBase();    
         //baseDatos.operacion("INSERT INTO peliculas (nombre,imagen,anio,descripcion) VALUES ('"+prueba+"','peliculas/"+prueba+"',1900,'This is a description' );");     
         
-        //Añadimos los elementos al CardLayout
-        ListaElementos elementos = new ListaElementos(9);
+        //Obtenemos el numero de filas de la tabla
+        int numElementos=numRows("PELICULAS");
+        
+        //Añadimos los elementos al CardLayout   |      Seleccionamos las peliculas de nuestra base de datos
+        ListaElementos elementos = new ListaElementos(baseDatos.select("SELECT * FROM PELICULAS ORDER BY nombre DESC;"),numElementos);
         cards.add(elementos, "peliculas");
         cardLayout.show(cards, "peliculas");
         
@@ -106,4 +109,16 @@ public class Application {
         frame.setVisible(true);
     }
 
+    /**
+     * 
+     * Devuelve el numero de elementos de una tabla 
+     * 
+     */
+     public int numRows(String tabla) throws SQLException{
+         int salida=0;
+        ResultSet tam=baseDatos.select("SELECT COUNT(*) FROM "+tabla+";");
+        tam.next();
+        salida = (int) tam.getLong(1);
+        return salida;
+     }
 }
