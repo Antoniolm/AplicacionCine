@@ -51,7 +51,7 @@ public class ListaElementos extends JPanel{
                 
                 //mientras no este la linea completa
                 if(peliActualFila!=elemPorFila){
-                        panel.add((new Elemento(lista.getString("nombre")+totalActual)).getelemento());
+                        panel.add((new Elemento(lista.getString("nombre"),lista.getString("imagen"))).getelemento());
                         peliActualFila++;
                 }
                 
@@ -64,7 +64,7 @@ public class ListaElementos extends JPanel{
                     //La insertamos en nuestro jpanel
                     mainList.add(panel, gbc, 0);
                     panel = new JPanel();
-                    panel.add((new Elemento(lista.getString("nombre"))).getelemento());
+                    panel.add((new Elemento(lista.getString("nombre"),lista.getString("imagen"))).getelemento());
                 }
                 totalActual++;
             };

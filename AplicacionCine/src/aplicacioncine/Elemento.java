@@ -20,12 +20,14 @@ import javax.swing.border.MatteBorder;
  * @author ANTONIO DAVID LÓPEZ MACHADO
  */
 public class Elemento {
-    String nombre;
+    String nombre,imagen,descripcion;
+    int año;
     private JPanel panelElemento;
     
    
-    public Elemento(String elemento) throws IOException{
+    public Elemento(String elemento,String img) throws IOException{
         nombre=elemento;
+        imagen=img;
         panelElemento = new JPanel();
         
         Dimension dm=new Dimension(105,150); //Le damos la dimension que queramos
@@ -49,11 +51,11 @@ public class Elemento {
      */
     public ImageIcon cargarImagen(){
         //Creamos la imagen pero sin ninguna de momento
-        ImageIcon imagen= new ImageIcon("imgs/unknow.png ");
-        Image image = imagen.getImage(); // transform it
+        ImageIcon imagenElemento= new ImageIcon(imagen+".jpg");
+        Image image = imagenElemento.getImage(); // transform it
         Image newimg = image.getScaledInstance(105, 135,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way 
-        imagen = new ImageIcon(newimg);  // transform it back
-        return imagen;
+        imagenElemento = new ImageIcon(newimg);  // transform it back
+        return imagenElemento;
     }
     
     /**
