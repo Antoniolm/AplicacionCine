@@ -52,11 +52,15 @@ public class Application {
         //baseDatos.operacion("INSERT INTO peliculas (nombre,imagen,anio,descripcion) VALUES ('"+prueba+"','peliculas/"+prueba+"',1900,'This is a description' );");     
         
         //Obtenemos el numero de filas de la tabla
-        int numElementos=numRows("PELICULAS");
+        int numElementosPeli=numRows("PELICULAS");
+        int numElementosSeries=numRows("SERIES");
         
         //Añadimos los elementos al CardLayout   |      Seleccionamos las peliculas de nuestra base de datos
-        ListaElementos elementos = new ListaElementos(baseDatos.select("SELECT * FROM PELICULAS ORDER BY nombre DESC;"),numElementos);
-        cards.add(elementos, "peliculas");
+        ListaElementos elementosPeliculas = new ListaElementos(baseDatos.select("SELECT * FROM PELICULAS ORDER BY nombre DESC;"),numElementosPeli);
+        ListaElementos elementosSeries = new ListaElementos(baseDatos.select("SELECT * FROM SERIES ORDER BY nombre DESC;"),numElementosSeries);
+        cards.add(elementosPeliculas, "peliculas");
+        cards.add(elementosSeries, "series");
+        //Visualizamos el cards que contiene las peliculas
         cardLayout.show(cards, "peliculas");
         
         //Panel donde se añadiran todos los botones principales
@@ -65,23 +69,35 @@ public class Application {
         //Boton para ver las peliculas
         JButton botonPeliculas = new JButton("Peliculas");
         botonPeliculas.setBounds(new Rectangle(0,40,150,40));
+        botonPeliculas.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cardLayout.show(cards, "peliculas");
+            }
+        });
+        
        
         //Boton para ver las series
         JButton botonSeries = new JButton("Series");
         botonSeries.setBounds(new Rectangle(0,80,150,40));
-
+        botonSeries.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cardLayout.show(cards, "series");
+            }
+        });
         
         //Añadimos dos nuevos botones para vistas y peliculas
         //a determinar
-        JButton botonVistasSeries = new JButton("Vistas");
-        botonVistasSeries.setBounds(new Rectangle(0,120,150,40));
-        panelbotones.add(new JButton("Pendientes"));
-        
+        JButton botonNuevaPelicula = new JButton("Añadir Pelicula");
+        botonNuevaPelicula.setBounds(new Rectangle(0,240,150,40));
+        JButton botonNuevaSeries = new JButton("Añadir Serie");
+        botonNuevaSeries.setBounds(new Rectangle(0,280,150,40));
         //Añadimos los botones al panel
         panelbotones.add(botonPeliculas);
         panelbotones.add(botonSeries);
-        panelbotones.add(botonVistasSeries);
-
+        panelbotones.add(botonNuevaPelicula);
+        panelbotones.add(botonNuevaSeries);
         //Añadimos a la interfaz el panel de botones
         Dimension dimPanelBoton =new Dimension(150,80);
         panelbotones.setPreferredSize(dimPanelBoton);

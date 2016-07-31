@@ -51,7 +51,7 @@ public class Elemento {
      */
     public ImageIcon cargarImagen(){
         //Creamos la imagen pero sin ninguna de momento
-        ImageIcon imagenElemento= new ImageIcon(imagen+".jpg");
+        ImageIcon imagenElemento= new ImageIcon("imgs/"+imagen+".jpg");
         Image image = imagenElemento.getImage(); // transform it
         Image newimg = image.getScaledInstance(105, 135,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way 
         imagenElemento = new ImageIcon(newimg);  // transform it back
