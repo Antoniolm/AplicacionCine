@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package aplicacioncine;
 
 import java.awt.BorderLayout;
@@ -49,6 +45,12 @@ public class Application {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         JPanel panelbotones = new JPanel();
 
+        //Abrimos la bd
+        DataBase baseDatos=new DataBase();
+        
+        
+        
+        
         //Añadimos los elementos al CardLayout
         ListaElementos elementos = new ListaElementos(9);
         cards.add(elementos, "peliculas");
@@ -102,7 +104,6 @@ public class Application {
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-
     }
 
 }

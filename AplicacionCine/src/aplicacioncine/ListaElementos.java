@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package aplicacioncine;
 
 import java.awt.BorderLayout;
@@ -17,7 +13,10 @@ import javax.swing.JScrollPane;
 import javax.swing.border.MatteBorder;
 
 /**
- *
+ * Clase que nos permitira realizar una card de CardsLayout, en esta card habra
+ * un conjunto de objetos de la clase Elemento, es decir, sera por 
+ * ejemplo nuestra lista de peliculas 
+ * 
  * @author ANTONIO DAVID LÓPEZ MACHADO
  */
 public class ListaElementos extends JPanel{
