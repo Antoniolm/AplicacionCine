@@ -47,14 +47,15 @@ public class ListaElementos extends JPanel{
             System.out.println("tamTotal : "+tamTotal);
             
             //Recorremos el numero de elementos
-            while( lista.next() ){
+            while(lista.next()){
                 
                 //mientras no este la linea completa
-                if(peliActualFila!=elemPorFila && totalActual!=tamTotal){
+                if(peliActualFila!=elemPorFila){
+                        panel.add((new Elemento(lista.getString("nombre")+totalActual)).getelemento());
                         peliActualFila++;
-                        panel.add((new Elemento(lista.getString("nombre"))).getelemento());
                 }
-                else{ //cuando lo esta la añadimos
+                
+                if(peliActualFila==elemPorFila || totalActual+1==tamTotal){ //cuando lo esta la añadimos
                     peliActualFila=1;
                     panel.setBorder(new MatteBorder(0, 0, 1, 0, Color.GRAY));
                     gbc = new GridBagConstraints();
@@ -66,7 +67,7 @@ public class ListaElementos extends JPanel{
                     panel.add((new Elemento(lista.getString("nombre"))).getelemento());
                 }
                 totalActual++;
-            }
+            };
             
             System.out.println("totalActual :"+totalActual);
             
