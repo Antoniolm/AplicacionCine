@@ -39,6 +39,7 @@ public class Application {
     public Application() throws IOException, SQLException{
         
         final JFrame frame = new JFrame("Aplicación de cine y series");
+        frame.setBackground(Color.yellow);
         //Este jpanel nos servira para hacer despues el cambio de cards(una para pelis y otra para series)
         CardLayout cardLayout= new CardLayout();
         JPanel cards = new JPanel(cardLayout);
@@ -101,6 +102,7 @@ public class Application {
         //Añadimos a la interfaz el panel de botones
         Dimension dimPanelBoton =new Dimension(150,80);
         panelbotones.setPreferredSize(dimPanelBoton);
+        panelbotones.setBackground(new Color(94, 94, 209));
         panelbotones.setLayout(null);
         frame.add(panelbotones, BorderLayout.WEST);
         frame.add(cards, BorderLayout.CENTER);
@@ -108,12 +110,13 @@ public class Application {
         //Creamos la zona de buscador
         JPanel Buscador = new JPanel();
         Buscador.add(new JLabel("Buscador:"));
-        Dimension dimbusca = new Dimension(0, 40);
+        Dimension dimbusca = new Dimension(0, 80);
         Buscador.setPreferredSize(dimbusca);
+        Buscador.setBackground(new Color(119, 119, 230));
+        //Buscador.setLayout(null);
 
         //Campo de texto para realizar la busqueda
         final JTextField campobus = new JTextField(20);
-        
         //Boton para realizar la busqueda
         JButton botonbuscar = new JButton("Buscar");
         
@@ -121,6 +124,24 @@ public class Application {
        //Añadimos ambos elementos al buscador y añadimos el buscador a la interfaz
         Buscador.add(campobus);
         Buscador.add(botonbuscar);
+        
+        JPanel Botones=new JPanel();
+        Botones.setBackground(new Color(119, 119, 230));
+        Botones.setPreferredSize(new Dimension(2000, 50));
+
+        //Creamos los botones 
+        JButton botonTodas = new JButton("Todas");
+        JButton botonVistas = new JButton("Vistas");
+        JButton botonPen = new JButton("Pendientes");
+        //Añadimos los botones al Jpanel
+        Botones.add(botonTodas);
+        Botones.add(botonVistas);
+        Botones.add(botonPen);
+
+        //Añadimos a nuestro mainList los botones
+        Buscador.add(Botones);
+        
+        
         frame.add(Buscador, BorderLayout.NORTH);
         
         

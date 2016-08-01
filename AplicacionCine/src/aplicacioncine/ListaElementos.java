@@ -30,7 +30,7 @@ public class ListaElementos extends JPanel{
             
             setLayout(new BorderLayout());
             mainList = new JPanel(new GridBagLayout());
-            
+            mainList.setBackground(new Color(215,215,240));
             //Realizamos la configuracion del mainList
             GridBagConstraints gbc = new GridBagConstraints();
             gbc.gridwidth = GridBagConstraints.REMAINDER;
@@ -51,7 +51,7 @@ public class ListaElementos extends JPanel{
             int peliActualFila=0;
             int totalActual=0;
             JPanel panel = new JPanel();
-            
+            panel.setBackground(new Color(215,215,240));
             
             //Recorremos el numero de elementos
             while(lista.next()){
@@ -69,26 +69,11 @@ public class ListaElementos extends JPanel{
                     mainList.add(panel, gbc, 0);
                     //Creamos un nuevo Jpanel y cargamos el elemento leido en este ciclo del while
                     panel = new JPanel();
+                    panel.setBackground(new Color(215,215,240));
                     panel.add((new Elemento(lista.getString("nombre"),lista.getString("imagen"))).getelemento());
                 }
                 totalActual++;
             };
-
-            //Creamos y damos dimension al Jpanel 
-            JPanel Botones=new JPanel();
-            Botones.setPreferredSize(new Dimension(800,80));
-            
-            //Creamos los botones 
-            JButton botonTodas = new JButton("Todas");
-            JButton botonVistas = new JButton("Vistas");
-            JButton botonPen = new JButton("Pendientes");
-            //Añadimos los botones al Jpanel
-            Botones.add(botonTodas);
-            Botones.add(botonVistas);
-            Botones.add(botonPen);
-            
-            //Añadimos a nuestro mainList los botones
-            mainList.add(Botones,gbc,0);
             
             validate();
             repaint();
