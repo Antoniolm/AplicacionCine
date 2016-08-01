@@ -22,6 +22,8 @@ public class InterfazElemento extends javax.swing.JFrame {
             
     public InterfazElemento(int  id_elem,String tabl) throws SQLException {
         initComponents();
+        //Cambiamos la configuracion al cerrar la ventana
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         baseDatos=new DataBase(); //Realizamos la conexion a la base de datos
         tabla=tabl;
         //Realizamos un select del objeto seleccionado para obtener su información
@@ -37,16 +39,23 @@ public class InterfazElemento extends javax.swing.JFrame {
         vista=salida.getBoolean("vista");
         pendiente=salida.getBoolean("pendiente");
         
-        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        //Creamos la imagen que se pondra en la interfaz        
         ImageIcon imagenIcon= new ImageIcon("imgs/"+imagen+".jpg");
         Image image = imagenIcon.getImage(); // transform it
         Image newimg = image.getScaledInstance(140, 192,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way 
         imagenIcon = new ImageIcon(newimg);  // transform it back        
         
+        //Cambiamos los valores de los elementos de la interfaz por los del objeto
         jLabel1.setIcon(imagenIcon);
         jLabel5.setText(nombre);
         jLabel6.setText(""+anio);
         jLabel7.setText(descripcion);
+        if(vista){
+            desactivarVista();
+        }
+        if(pendiente){
+            desactivarPendiente();
+        }
         
         pack();
     }
@@ -205,7 +214,19 @@ public class InterfazElemento extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         try {
-            baseDatos.operacion("UPDATE "+tabla+" SET pendiente=1 WHERE id="+id+";");
+            int valor;
+            if(pendiente){
+                valor=0;
+                activarPendiente();
+                pendiente=false;
+            }
+            else{
+                valor=1;
+                desactivarPendiente();
+                pendiente=true; 
+            }
+            baseDatos.operacion("UPDATE "+tabla+" SET pendiente="+valor+" WHERE id="+id+";");
+            
         } catch (SQLException ex) {
             Logger.getLogger(InterfazElemento.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -213,7 +234,18 @@ public class InterfazElemento extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         try {
-            baseDatos.operacion("UPDATE "+tabla+" SET vista=1 WHERE id="+id+";");
+            int valor;
+            if(vista){
+                valor=0;
+                activarVista();
+                vista=false;
+            }
+            else{
+                valor=1;
+                desactivarVista();
+                vista=true; 
+            }
+            baseDatos.operacion("UPDATE "+tabla+" SET vista="+valor+" WHERE id="+id+";");
         } catch (SQLException ex) {
             Logger.getLogger(InterfazElemento.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -232,6 +264,25 @@ public class InterfazElemento extends javax.swing.JFrame {
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
     }//GEN-LAST:event_formWindowClosed
     
+    
+    private void activarVista(){
+        jButton3.setEnabled(true);
+        jButton2.setText("Añadir a vistas");
+    }
+    private void desactivarVista(){
+        jButton3.setEnabled(false);
+        jButton2.setText("Quitar de vistas");
+    }
+    
+    private void activarPendiente(){
+        jButton2.setEnabled(true);
+        jButton3.setText("Añadir a pendientes");
+    }
+    
+    private void desactivarPendiente(){
+        jButton2.setEnabled(false);
+        jButton3.setText("Quitar de pendientes");
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
