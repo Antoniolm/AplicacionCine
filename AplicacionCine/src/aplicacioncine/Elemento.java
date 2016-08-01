@@ -49,7 +49,7 @@ public class Elemento {
         panelElemento.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mousePressed(MouseEvent e) {
-                        new InterfaceElemento(elemLink).setVisible(true);
+                        new InterfazElemento(elemLink).setVisible(true);
                 }
         });
     }
