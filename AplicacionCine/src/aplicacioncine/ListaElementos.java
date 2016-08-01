@@ -33,10 +33,21 @@ public class ListaElementos extends JPanel{
             setLayout(new BorderLayout());
             mainList = new JPanel(new GridBagLayout());
             mainList.setBackground(new Color(215,215,240));
-            add(new JScrollPane(mainList)); //Añadimos nuestro mainlist al objeto
+            //Realizamos la configuracion que aplicaremos al mainList
+            GridBagConstraints gbc = new GridBagConstraints();
+            gbc.gridwidth = GridBagConstraints.REMAINDER;
+            gbc.weightx = 1;
+            gbc.weighty = 1;
+                       
+            //Aplicamos dicha configuracion
+            JPanel auxiliar=new JPanel();
+            auxiliar.setBackground(new Color(215,215,240));
+            mainList.add(auxiliar, gbc);
+            add(new JScrollPane(mainList)); //Añadimos nuestro mainlist a un ScrollPane para poder
+                                            //Ver la totalidad de los elementos
 
             //Creamos la configuracion de cada elemento
-            GridBagConstraints gbc = new GridBagConstraints();
+            gbc = new GridBagConstraints();
             gbc.gridwidth = GridBagConstraints.REMAINDER;
             gbc.gridx = GridBagConstraints.NORTH;
             
@@ -59,7 +70,7 @@ public class ListaElementos extends JPanel{
                     peliActualFila=1;
                     panel.setBorder(new MatteBorder(0, 0, 1, 0, Color.GRAY)); //Border del panel
                     //Insertamos la linea en el mainList
-                    mainList.add(panel, gbc);
+                    mainList.add(panel, gbc,0);
                     //Creamos un nuevo Jpanel y cargamos el elemento leido en este ciclo del while
                     panel = new JPanel();
                     panel.setBackground(new Color(215,215,240));

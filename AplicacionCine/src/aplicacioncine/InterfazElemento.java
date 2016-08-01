@@ -17,7 +17,7 @@ public class InterfazElemento extends javax.swing.JFrame {
     DataBase baseDatos;
     int anio,id;
     String nombre,imagen,descripcion;
-    boolean vista,pendiente;
+    boolean vista,pendiente,close;
     String tabla;
             
     public InterfazElemento(int  id_elem,String tabl) throws SQLException {
@@ -26,6 +26,7 @@ public class InterfazElemento extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         baseDatos=new DataBase(); //Realizamos la conexion a la base de datos
         tabla=tabl;
+        close=false;
         //Realizamos un select del objeto seleccionado para obtener su información
         ResultSet salida=baseDatos.select("select * FROM "+tabla+" WHERE id="+id_elem+";");
         salida.next();
@@ -255,16 +256,23 @@ public class InterfazElemento extends javax.swing.JFrame {
         try {
             // TODO add your handling code here:
             baseDatos.cerrarConexion();
+            setVisible(false);
+            close=true;
         } catch (SQLException ex) {
             Logger.getLogger(InterfazElemento.class.getName()).log(Level.SEVERE, null, ex);
         }
-        this.dispose();
+
     }//GEN-LAST:event_formWindowClosing
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
     }//GEN-LAST:event_formWindowClosed
     
-    
+    public void cerrarVentana(){
+        this.dispose(); 
+    }
+    public boolean isClose(){
+        return close;
+    }
     private void activarVista(){
         jButton3.setEnabled(true);
         jButton2.setText("Añadir a vistas");

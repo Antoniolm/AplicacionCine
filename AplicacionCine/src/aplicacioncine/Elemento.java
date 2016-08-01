@@ -27,12 +27,16 @@ public class Elemento {
     int id;
     boolean tipoElem;
     private JPanel panelElemento;
+    boolean activado;
+    InterfazElemento interfaz;
    
     public Elemento(int idEle,String nom,String img,boolean tipoElemento) throws IOException{
         nombre=nom;
         imagen=img;
         id=idEle;
         tipoElem=tipoElemento;
+        activado=false;
+        interfaz=null;
         
         panelElemento = new JPanel();
         
@@ -56,7 +60,10 @@ public class Elemento {
                         else salida="series";
                     
                     try {
-                        new InterfazElemento(id,salida).setVisible(true);
+                        if(interfaz==null || interfaz.isClose()){
+                            interfaz=new InterfazElemento(id,salida);
+                            interfaz.setVisible(true);
+                        }
                     } catch (SQLException ex) {
                         Logger.getLogger(Elemento.class.getName()).log(Level.SEVERE, null, ex);
                     }
