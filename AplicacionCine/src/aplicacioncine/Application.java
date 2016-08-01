@@ -113,13 +113,17 @@ public class Application {
 
         //Campo de texto para realizar la busqueda
         final JTextField campobus = new JTextField(20);
-        Buscador.add(campobus);
+        
         //Boton para realizar la busqueda
         JButton botonbuscar = new JButton("Buscar");
         
+
        //Añadimos ambos elementos al buscador y añadimos el buscador a la interfaz
+        Buscador.add(campobus);
         Buscador.add(botonbuscar);
         frame.add(Buscador, BorderLayout.NORTH);
+        
+        
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);

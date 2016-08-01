@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.MatteBorder;
@@ -29,22 +30,28 @@ public class ListaElementos extends JPanel{
             
             setLayout(new BorderLayout());
             mainList = new JPanel(new GridBagLayout());
-            //Realizamos la configuracion 
+            
+            //Realizamos la configuracion del mainList
             GridBagConstraints gbc = new GridBagConstraints();
             gbc.gridwidth = GridBagConstraints.REMAINDER;
             gbc.weightx = 1;
-            gbc.weighty = 1;
+            gbc.weighty = 1;    
+            
             //Creamos un nuevo jPanel a Lista elementos
             mainList.add(new JPanel(), gbc);
             add(new JScrollPane(mainList)); //Añadimos nuestro mainlist al objeto
 
+            //Creamos la configuracion de cada elemento
+            gbc = new GridBagConstraints();
+            gbc.gridwidth = GridBagConstraints.REMAINDER;
+            gbc.gridx = GridBagConstraints.NORTH;
+            
             //Este entero nos permitira hacer las lineas en las que va dividiendose
             //la lista de elementos
             int peliActualFila=0;
+            int totalActual=0;
             JPanel panel = new JPanel();
             
-            int totalActual=0;
-            System.out.println("tamTotal : "+tamTotal);
             
             //Recorremos el numero de elementos
             while(lista.next()){
@@ -57,24 +64,35 @@ public class ListaElementos extends JPanel{
                 
                 if(peliActualFila==elemPorFila || totalActual+1==tamTotal){ //cuando lo esta la añadimos
                     peliActualFila=1;
-                    panel.setBorder(new MatteBorder(0, 0, 1, 0, Color.GRAY));
-                    gbc = new GridBagConstraints();
-                    gbc.gridwidth = GridBagConstraints.REMAINDER;
-                    gbc.gridx = GridBagConstraints.NORTH;
-                    //La insertamos en nuestro jpanel
+                    panel.setBorder(new MatteBorder(0, 0, 1, 0, Color.GRAY)); //Border del panel
+                    //Insertamos la linea en el mainList
                     mainList.add(panel, gbc, 0);
+                    //Creamos un nuevo Jpanel y cargamos el elemento leido en este ciclo del while
                     panel = new JPanel();
                     panel.add((new Elemento(lista.getString("nombre"),lista.getString("imagen"))).getelemento());
                 }
                 totalActual++;
             };
+
+            //Creamos y damos dimension al Jpanel 
+            JPanel Botones=new JPanel();
+            Botones.setPreferredSize(new Dimension(800,80));
             
-            System.out.println("totalActual :"+totalActual);
+            //Creamos los botones 
+            JButton botonTodas = new JButton("Todas");
+            JButton botonVistas = new JButton("Vistas");
+            JButton botonPen = new JButton("Pendientes");
+            //Añadimos los botones al Jpanel
+            Botones.add(botonTodas);
+            Botones.add(botonVistas);
+            Botones.add(botonPen);
+            
+            //Añadimos a nuestro mainList los botones
+            mainList.add(Botones,gbc,0);
             
             validate();
             repaint();
         }
-        
         private JPanel cargarLista(){
             return new JPanel();
             
