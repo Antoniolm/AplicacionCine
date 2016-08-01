@@ -23,11 +23,15 @@ public class Elemento {
     String nombre,imagen,descripcion;
     int año;
     private JPanel panelElemento;
-    
+    Elemento elemLink;
    
-    public Elemento(String elemento,String img) throws IOException{
+    public Elemento(String elemento,String img,int anio,String descrip) throws IOException{
         nombre=elemento;
         imagen=img;
+        descripcion=descrip;
+        año=anio;
+        elemLink=this;
+        
         panelElemento = new JPanel();
         
         Dimension dm=new Dimension(105,150); //Le damos la dimension que queramos
@@ -39,7 +43,15 @@ public class Elemento {
         //Añadimos al panel tanto la imagen como el nombre del 
         panelElemento.add(new JLabel(cargarImagen())); 
         panelElemento.add(cargarNombre());
-
+        
+        //Añadimos funcionalidad al panel, podremos pulsarlo para que nos muestra una 
+        //pantalla con toda la informacion del elemento
+        panelElemento.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                        new InterfaceElemento(elemLink).setVisible(true);
+                }
+        });
     }
     public JPanel getelemento(){
         return panelElemento;
@@ -67,4 +79,21 @@ public class Elemento {
         nom.setFont(new java.awt.Font("Tahoma", 0, 11)); 
         return nom;
     }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public String getImagen() {
+        return imagen;
+    }
+
+    public int getAño() {
+        return año;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+    
 }

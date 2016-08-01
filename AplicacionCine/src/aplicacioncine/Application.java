@@ -39,7 +39,6 @@ public class Application {
     public Application() throws IOException, SQLException{
         
         final JFrame frame = new JFrame("Aplicación de cine y series");
-        frame.setBackground(Color.yellow);
         //Este jpanel nos servira para hacer despues el cambio de cards(una para pelis y otra para series)
         CardLayout cardLayout= new CardLayout();
         JPanel cards = new JPanel(cardLayout);
@@ -59,6 +58,7 @@ public class Application {
         //Añadimos los elementos al CardLayout   |      Seleccionamos las peliculas de nuestra base de datos
         ListaElementos elementosPeliculas = new ListaElementos(baseDatos.select("SELECT * FROM PELICULAS ORDER BY nombre DESC;"),numElementosPeli);
         ListaElementos elementosSeries = new ListaElementos(baseDatos.select("SELECT * FROM SERIES ORDER BY nombre DESC;"),numElementosSeries);
+        
         cards.add(elementosPeliculas, "peliculas");
         cards.add(elementosSeries, "series");
         //Visualizamos el cards que contiene las peliculas
@@ -77,7 +77,6 @@ public class Application {
             }
         });
         
-       
         //Boton para ver las series
         JButton botonSeries = new JButton("Series");
         botonSeries.setBounds(new Rectangle(0,80,150,40));
@@ -138,10 +137,8 @@ public class Application {
         Botones.add(botonVistas);
         Botones.add(botonPen);
 
-        //Añadimos a nuestro mainList los botones
+        //Añadimos a nuestro buscador los botones y lo añadimos a la aplicacion
         Buscador.add(Botones);
-        
-        
         frame.add(Buscador, BorderLayout.NORTH);
         
         
@@ -149,7 +146,8 @@ public class Application {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
-
+    
+    
     /**
      * 
      * Devuelve el numero de elementos de una tabla 

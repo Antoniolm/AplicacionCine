@@ -31,18 +31,10 @@ public class ListaElementos extends JPanel{
             setLayout(new BorderLayout());
             mainList = new JPanel(new GridBagLayout());
             mainList.setBackground(new Color(215,215,240));
-            //Realizamos la configuracion del mainList
-            GridBagConstraints gbc = new GridBagConstraints();
-            gbc.gridwidth = GridBagConstraints.REMAINDER;
-            gbc.weightx = 1;
-            gbc.weighty = 1;    
-            
-            //Creamos un nuevo jPanel a Lista elementos
-            mainList.add(new JPanel(), gbc);
             add(new JScrollPane(mainList)); //Añadimos nuestro mainlist al objeto
 
             //Creamos la configuracion de cada elemento
-            gbc = new GridBagConstraints();
+            GridBagConstraints gbc = new GridBagConstraints();
             gbc.gridwidth = GridBagConstraints.REMAINDER;
             gbc.gridx = GridBagConstraints.NORTH;
             
@@ -58,7 +50,7 @@ public class ListaElementos extends JPanel{
                 
                 //mientras no este la linea completa
                 if(peliActualFila!=elemPorFila){
-                        panel.add((new Elemento(lista.getString("nombre"),lista.getString("imagen"))).getelemento());
+                        panel.add((new Elemento(lista.getString("nombre"),lista.getString("imagen"),lista.getInt("anio"),lista.getString("descripcion"))).getelemento());
                         peliActualFila++;
                 }
                 
@@ -70,7 +62,7 @@ public class ListaElementos extends JPanel{
                     //Creamos un nuevo Jpanel y cargamos el elemento leido en este ciclo del while
                     panel = new JPanel();
                     panel.setBackground(new Color(215,215,240));
-                    panel.add((new Elemento(lista.getString("nombre"),lista.getString("imagen"))).getelemento());
+                    panel.add((new Elemento(lista.getString("nombre"),lista.getString("imagen"),lista.getInt("anio"),lista.getString("descripcion"))).getelemento());
                 }
                 totalActual++;
             };
