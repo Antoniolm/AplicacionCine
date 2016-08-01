@@ -36,12 +36,15 @@ import javax.swing.border.MatteBorder;
  */
 public class Application {
     DataBase baseDatos;
+    boolean tipoActivado; //boolean para saber que card utilizar al pulsar los botones
+                         // de Todas,vistas y pendientes
+    private JPanel cards;
     public Application() throws IOException, SQLException{
         
         final JFrame frame = new JFrame("Aplicación de cine y series");
         //Este jpanel nos servira para hacer despues el cambio de cards(una para pelis y otra para series)
         CardLayout cardLayout= new CardLayout();
-        JPanel cards = new JPanel(cardLayout);
+        cards = new JPanel(cardLayout);
         Dimension dm = new Dimension(1250, 800);
         frame.setPreferredSize(dm);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -52,17 +55,33 @@ public class Application {
         //baseDatos.operacion("INSERT INTO peliculas (nombre,imagen,anio,descripcion) VALUES ('"+prueba+"','peliculas/"+prueba+"',1900,'This is a description' );");     
         
         //Obtenemos el numero de filas de la tabla
-        int numElementosPeli=numRows("PELICULAS");
-        int numElementosSeries=numRows("SERIES");
+        int numElementosPeli=numRows("PELICULAS","");
+        int numElementosSeries=numRows("SERIES","");
         
         //Añadimos los elementos al CardLayout   |      Seleccionamos las peliculas de nuestra base de datos                    //true para peliculas
         ListaElementos elementosPeliculas = new ListaElementos(baseDatos.select("SELECT * FROM PELICULAS ORDER BY nombre DESC;"),numElementosPeli,true);
         ListaElementos elementosSeries = new ListaElementos(baseDatos.select("SELECT * FROM SERIES ORDER BY nombre DESC;"),numElementosSeries,false);
-                                                                                                                              //false para peliculas
+                                                                                                                            //false para peliculas
+        //Creamos 4 elementos mas, 2 por cada tipo de elemento
+        numElementosPeli=numRows("PELICULAS","WHERE vista=1");
+        ListaElementos elementosPeliVistas = new ListaElementos(baseDatos.select("SELECT * FROM PELICULAS WHERE vista=1 ORDER BY nombre DESC;"),numElementosPeli,true);
+        numElementosPeli=numRows("PELICULAS","WHERE pendiente=1");
+        ListaElementos elementosPeliPendiente = new ListaElementos(baseDatos.select("SELECT * FROM PELICULAS WHERE pendiente=1 ORDER BY nombre DESC;"),numElementosPeli,true);
+        numElementosSeries=numRows("SERIES","WHERE vista=1");
+        ListaElementos elementosSeriesVistas = new ListaElementos(baseDatos.select("SELECT * FROM SERIES WHERE vista=1 ORDER BY nombre DESC;"),numElementosSeries,false);
+        numElementosSeries=numRows("SERIES","WHERE pendiente=1");
+        ListaElementos elementosSeriesPendiente = new ListaElementos(baseDatos.select("SELECT * FROM SERIES WHERE pendiente=1 ORDER BY nombre DESC;"),numElementosSeries,false);
+        
+        //Añadimos las cartas
         cards.add(elementosPeliculas, "peliculas");
         cards.add(elementosSeries, "series");
+        cards.add(elementosPeliVistas,"pelisVistas");
+        cards.add(elementosPeliPendiente,"pelisPendi");
+        cards.add(elementosSeriesVistas,"seriesVistas");
+        cards.add(elementosSeriesPendiente,"seriesPendi");
         //Visualizamos el cards que contiene las peliculas
         cardLayout.show(cards, "peliculas");
+        tipoActivado=true;
         
         //Panel donde se añadiran todos los botones principales
         panelbotones.setLayout(new BoxLayout(panelbotones, BoxLayout.Y_AXIS));
@@ -74,6 +93,7 @@ public class Application {
             @Override
             public void actionPerformed(ActionEvent e) {
                 cardLayout.show(cards, "peliculas");
+                tipoActivado=true;
             }
         });
         
@@ -84,6 +104,7 @@ public class Application {
             @Override
             public void actionPerformed(ActionEvent e) {
                 cardLayout.show(cards, "series");
+                tipoActivado=false;
             }
         });
         
@@ -130,8 +151,31 @@ public class Application {
 
         //Creamos los botones 
         JButton botonTodas = new JButton("Todas");
+        botonTodas.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(tipoActivado)cardLayout.show(cards, "peliculas");
+                else cardLayout.show(cards,"series");
+                
+            }
+        });
         JButton botonVistas = new JButton("Vistas");
+        botonVistas.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(tipoActivado)cardLayout.show(cards, "pelisVistas");
+                else cardLayout.show(cards,"seriesVistas");
+            }
+        });
         JButton botonPen = new JButton("Pendientes");
+        botonPen.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(tipoActivado)cardLayout.show(cards, "pelisPendi");
+                else cardLayout.show(cards,"seriesPendi");
+            }
+        });
+        
         //Añadimos los botones al Jpanel
         Botones.add(botonTodas);
         Botones.add(botonVistas);
@@ -153,9 +197,9 @@ public class Application {
      * Devuelve el numero de elementos de una tabla 
      * 
      */
-     public int numRows(String tabla) throws SQLException{
+     public int numRows(String tabla,String Where) throws SQLException{
          int salida=0;
-        ResultSet tam=baseDatos.select("SELECT COUNT(*) FROM "+tabla+";");
+        ResultSet tam=baseDatos.select("SELECT COUNT(*) FROM "+tabla+" "+Where+";");
         tam.next();
         salida = (int) tam.getLong(1);
         return salida;

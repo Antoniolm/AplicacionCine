@@ -49,7 +49,6 @@ public class ListaElementos extends JPanel{
             
             //Recorremos el numero de elementos
             while(lista.next()){
-                
                 //mientras no este la linea completa
                 if(peliActualFila!=elemPorFila){
                         panel.add((new Elemento(lista.getInt("id") ,lista.getString("nombre"),lista.getString("imagen"),tipoElem)).getelemento());
@@ -60,7 +59,7 @@ public class ListaElementos extends JPanel{
                     peliActualFila=1;
                     panel.setBorder(new MatteBorder(0, 0, 1, 0, Color.GRAY)); //Border del panel
                     //Insertamos la linea en el mainList
-                    mainList.add(panel, gbc, 0);
+                    mainList.add(panel, gbc);
                     //Creamos un nuevo Jpanel y cargamos el elemento leido en este ciclo del while
                     panel = new JPanel();
                     panel.setBackground(new Color(215,215,240));
