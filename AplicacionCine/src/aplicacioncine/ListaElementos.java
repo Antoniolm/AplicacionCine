@@ -24,9 +24,11 @@ import javax.swing.border.MatteBorder;
  */
 public class ListaElementos extends JPanel{
      private JPanel mainList;
+     private boolean tipoElem;
         private ArrayList<String> peliculas;
-        public ListaElementos(ResultSet lista,int tamTotal) throws IOException, SQLException{
+        public ListaElementos(ResultSet lista,int tamTotal,boolean tipoElemento) throws IOException, SQLException{
             int elemPorFila=9; //numero de elementos por cada fila
+            tipoElem=tipoElemento;
             
             setLayout(new BorderLayout());
             mainList = new JPanel(new GridBagLayout());
@@ -50,7 +52,7 @@ public class ListaElementos extends JPanel{
                 
                 //mientras no este la linea completa
                 if(peliActualFila!=elemPorFila){
-                        panel.add((new Elemento(lista.getString("nombre"),lista.getString("imagen"),lista.getInt("anio"),lista.getString("descripcion"))).getelemento());
+                        panel.add((new Elemento(lista.getInt("id") ,lista.getString("nombre"),lista.getString("imagen"),tipoElem)).getelemento());
                         peliActualFila++;
                 }
                 
@@ -62,7 +64,7 @@ public class ListaElementos extends JPanel{
                     //Creamos un nuevo Jpanel y cargamos el elemento leido en este ciclo del while
                     panel = new JPanel();
                     panel.setBackground(new Color(215,215,240));
-                    panel.add((new Elemento(lista.getString("nombre"),lista.getString("imagen"),lista.getInt("anio"),lista.getString("descripcion"))).getelemento());
+                    panel.add((new Elemento(lista.getInt("id") ,lista.getString("nombre"),lista.getString("imagen"),tipoElem)).getelemento());
                 }
                 totalActual++;
             };

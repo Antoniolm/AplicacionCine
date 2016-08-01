@@ -7,6 +7,9 @@ import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -20,17 +23,16 @@ import javax.swing.border.MatteBorder;
  * @author ANTONIO DAVID LÓPEZ MACHADO
  */
 public class Elemento {
-    String nombre,imagen,descripcion;
-    int año;
+    String nombre,imagen;
+    int id;
+    boolean tipoElem;
     private JPanel panelElemento;
-    Elemento elemLink;
    
-    public Elemento(String elemento,String img,int anio,String descrip) throws IOException{
-        nombre=elemento;
+    public Elemento(int idEle,String nom,String img,boolean tipoElemento) throws IOException{
+        nombre=nom;
         imagen=img;
-        descripcion=descrip;
-        año=anio;
-        elemLink=this;
+        id=idEle;
+        tipoElem=tipoElemento;
         
         panelElemento = new JPanel();
         
@@ -49,7 +51,15 @@ public class Elemento {
         panelElemento.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mousePressed(MouseEvent e) {
-                        new InterfazElemento(elemLink).setVisible(true);
+                        String salida;
+                        if(tipoElemento) salida="peliculas";
+                        else salida="series";
+                    
+                    try {
+                        new InterfazElemento(id,salida).setVisible(true);
+                    } catch (SQLException ex) {
+                        Logger.getLogger(Elemento.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
         });
     }
@@ -86,14 +96,6 @@ public class Elemento {
 
     public String getImagen() {
         return imagen;
-    }
-
-    public int getAño() {
-        return año;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
     }
     
 }

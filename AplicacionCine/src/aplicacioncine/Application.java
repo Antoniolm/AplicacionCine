@@ -55,10 +55,10 @@ public class Application {
         int numElementosPeli=numRows("PELICULAS");
         int numElementosSeries=numRows("SERIES");
         
-        //Añadimos los elementos al CardLayout   |      Seleccionamos las peliculas de nuestra base de datos
-        ListaElementos elementosPeliculas = new ListaElementos(baseDatos.select("SELECT * FROM PELICULAS ORDER BY nombre DESC;"),numElementosPeli);
-        ListaElementos elementosSeries = new ListaElementos(baseDatos.select("SELECT * FROM SERIES ORDER BY nombre DESC;"),numElementosSeries);
-        
+        //Añadimos los elementos al CardLayout   |      Seleccionamos las peliculas de nuestra base de datos                    //true para peliculas
+        ListaElementos elementosPeliculas = new ListaElementos(baseDatos.select("SELECT * FROM PELICULAS ORDER BY nombre DESC;"),numElementosPeli,true);
+        ListaElementos elementosSeries = new ListaElementos(baseDatos.select("SELECT * FROM SERIES ORDER BY nombre DESC;"),numElementosSeries,false);
+                                                                                                                              //false para peliculas
         cards.add(elementosPeliculas, "peliculas");
         cards.add(elementosSeries, "series");
         //Visualizamos el cards que contiene las peliculas
