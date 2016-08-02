@@ -25,12 +25,16 @@ public class InterfazNuevoEle extends javax.swing.JFrame {
     private DataBase baseDatos;
     private int anio,id;
     private String nombre,imagen,descripcion,nombreImagen;
-    private boolean close;
+    private boolean close,isAñadida;
     private String tabla;
-            
-    public InterfazNuevoEle() {
+    private Application aplicacion;
+    
+    public InterfazNuevoEle(Application apli) {
         initComponents();
         this.setTitle("Nuevo elemento");
+        isAñadida=false;
+        close=false;
+        aplicacion=apli;
         //Cambiamos la configuracion al cerrar la ventana
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
@@ -271,9 +275,10 @@ public class InterfazNuevoEle extends javax.swing.JFrame {
             try {
                 baseDatos.operacion("INSERT INTO "+tabla+" (nombre,imagen,anio,descripcion,vista,pendiente) VALUES ('"+campoNombre.getText()+"','"+tabla+"/"+nombreImagen+"',"+anio+",'"+campoDescrip.getText()+"',0,0);");
                 baseDatos.cerrarConexion(); //cerramos la conexion
-            } catch (SQLException ex) {
-                Logger.getLogger(InterfazNuevoEle.class.getName()).log(Level.SEVERE, null, ex);
-            }
+                aplicacion.ActualizarCarta(tabla);
+            } catch (SQLException ex) {Logger.getLogger(InterfazNuevoEle.class.getName()).log(Level.SEVERE, null, ex);} 
+            catch (IOException ex) {Logger.getLogger(InterfazNuevoEle.class.getName()).log(Level.SEVERE, null, ex);}
+            
             dispose();
             close=true;
         }
@@ -282,7 +287,10 @@ public class InterfazNuevoEle extends javax.swing.JFrame {
     public boolean isClose(){
         return close;
     }
-
+    
+    public boolean isAñadida(){
+        return isAñadida;
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField campoAnio;
     private javax.swing.JTextArea campoDescrip;

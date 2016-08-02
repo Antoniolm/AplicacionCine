@@ -43,12 +43,13 @@ public class Application {
     //estado nos permitira saber en que seccion estamos 
     int estado; // 0=todas , 1=vistas, 2=pendientes
     InterfazNuevoEle nuevoElemento;
+    Application apliLinker;
     
     public Application() throws IOException, SQLException{
         //Inicializamos variables
         tipoActivado=true;
         estado=0;
-        
+        apliLinker=this;
         //Creamos nuestra ventana principal
         final JFrame frame = new JFrame("Aplicación de cine y series");
         //Este jpanel nos servira para hacer despues el cambio de cards(una para pelis y otra para series)
@@ -115,7 +116,7 @@ public class Application {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(nuevoElemento==null || nuevoElemento.isClose()){
-                    nuevoElemento=new InterfazNuevoEle();
+                    nuevoElemento=new InterfazNuevoEle(apliLinker);
                     nuevoElemento.setVisible(true);
                 }
             }
@@ -271,6 +272,30 @@ public class Application {
              Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);
          }
      
+     }
+     
+     /**
+      * Metodo que nos permite actualizar las series y peliculas despues de haber introducido un nuevo elemento
+      * @param tabla
+      * 
+      */
+     public void ActualizarCarta(String tabla) throws SQLException, IOException{
+         
+        //Obtenemos el numero de filas de la tabla
+        int numElementos=numRows(tabla,"");
+        
+        if(tabla.equals("peliculas")){
+            //Añadimos los elementos al CardLayout   |      Seleccionamos las peliculas de nuestra base de datos                    //true para peliculas
+            ListaElementos elementosPeliculas = new ListaElementos(baseDatos.select("SELECT * FROM PELICULAS ORDER BY nombre DESC;"),numElementos,true);
+            cards.add(elementosPeliculas, "peliculas");
+            cardLayout.show(cards, "peliculas");
+        }
+        else{
+            ListaElementos elementosSeries = new ListaElementos(baseDatos.select("SELECT * FROM SERIES ORDER BY nombre DESC;"),numElementos,false);    
+            cards.add(elementosSeries, "series");
+            cardLayout.show(cards, "series");
+        }
+        
      
      }
 }
