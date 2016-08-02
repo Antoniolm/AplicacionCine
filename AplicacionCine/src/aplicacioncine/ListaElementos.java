@@ -55,28 +55,30 @@ public class ListaElementos extends JPanel{
             //la lista de elementos
             int peliActualFila=0;
             int totalActual=0;
+            int restoElementos=tamTotal%elemPorFila;
             JPanel panel = new JPanel();
             panel.setBackground(new Color(215,215,240));
-            
+            System.out.println("resto:" + restoElementos);
             //Recorremos el numero de elementos
             while(lista.next()){
                 //mientras no este la linea completa
                 if(peliActualFila!=elemPorFila){
-                        panel.add((new Elemento(lista.getInt("id") ,lista.getString("nombre"),lista.getString("imagen"),tipoElem)).getelemento());
+                        panel.add((new Elemento(lista.getInt("id") ,lista.getString("nombre"),lista.getString("imagen"),tipoElem)).getelemento(),0);
                         peliActualFila++;
                 }
                 
-                if(peliActualFila==elemPorFila || totalActual+1==tamTotal){ //cuando lo esta la añadimos
-                    peliActualFila=1;
+                if(peliActualFila==elemPorFila || (restoElementos!=0 && totalActual==restoElementos-1  ) ){ //cuando lo esta la añadimos
+                    peliActualFila=0;
                     panel.setBorder(new MatteBorder(0, 0, 1, 0, Color.GRAY)); //Border del panel
                     //Insertamos la linea en el mainList
                     mainList.add(panel, gbc,0);
                     //Creamos un nuevo Jpanel y cargamos el elemento leido en este ciclo del while
                     panel = new JPanel();
                     panel.setBackground(new Color(215,215,240));
-                    panel.add((new Elemento(lista.getInt("id") ,lista.getString("nombre"),lista.getString("imagen"),tipoElem)).getelemento());
                 }
                 totalActual++;
+                if(totalActual==restoElementos-1)
+                    System.out.println("totalActual : "+totalActual);
             };
             
             validate();

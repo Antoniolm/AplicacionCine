@@ -15,12 +15,6 @@ public class DataBase {
             Class.forName("org.sqlite.JDBC");
             conexion = DriverManager.getConnection("jdbc:sqlite:BD/DataBase.db");
             stmt=conexion.createStatement();
-            /*operacion("CREATE TABLE series("
-                    + "   id INTEGER PRIMARY KEY   AUTOINCREMENT, "
-                    + "   nombre           TEXT      NOT NULL, "
-                    + "   imagen           TEXT       NOT NULL, "
-                    + "   anio        INT, "
-                    + "   descripcion         TEXT);");*/
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);

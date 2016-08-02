@@ -58,6 +58,7 @@ public class InterfazElemento extends javax.swing.JFrame {
             desactivarPendiente();
         }
         
+        baseDatos.cerrarConexion();
         pack();
     }
 
@@ -226,8 +227,9 @@ public class InterfazElemento extends javax.swing.JFrame {
                 desactivarPendiente();
                 pendiente=true; 
             }
+            baseDatos=new DataBase();
             baseDatos.operacion("UPDATE "+tabla+" SET pendiente="+valor+" WHERE id="+id+";");
-            
+            baseDatos.cerrarConexion();
         } catch (SQLException ex) {
             Logger.getLogger(InterfazElemento.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -246,6 +248,7 @@ public class InterfazElemento extends javax.swing.JFrame {
                 desactivarVista();
                 vista=true; 
             }
+            baseDatos=new DataBase();
             baseDatos.operacion("UPDATE "+tabla+" SET vista="+valor+" WHERE id="+id+";");
         } catch (SQLException ex) {
             Logger.getLogger(InterfazElemento.class.getName()).log(Level.SEVERE, null, ex);
@@ -253,15 +256,8 @@ public class InterfazElemento extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        try {
-            // TODO add your handling code here:
-            baseDatos.cerrarConexion();
-            setVisible(false);
+            dispose();
             close=true;
-        } catch (SQLException ex) {
-            Logger.getLogger(InterfazElemento.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
     }//GEN-LAST:event_formWindowClosing
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
