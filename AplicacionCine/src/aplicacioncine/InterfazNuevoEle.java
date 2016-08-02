@@ -262,12 +262,13 @@ public class InterfazNuevoEle extends javax.swing.JFrame {
             DataBase baseDatos=new DataBase(); //conexion de la base datos
             anio=Integer.parseInt(campoAnio.getText());
             tabla=(String) campoTipo.getSelectedItem();
-            //Files nuevoArchivo=new Files();
+            
+            //Creamos los destinos de las imagenes
             Path origen=Paths.get(imagen);
             Path destino=Paths.get(new File(".").getAbsolutePath()+"/imgs/"+tabla+"/"+nombreImagen);
-            System.out.println("path :"+ new File(".").getAbsolutePath()+"/imgs/"+tabla+"/"+nombreImagen);
+           
             try {
-               Files.copy(origen, destino, StandardCopyOption.REPLACE_EXISTING);
+               Files.copy(origen, destino, StandardCopyOption.REPLACE_EXISTING); //Realizamos la copia de imagenes
             } catch (IOException ex) {
                 Logger.getLogger(InterfazNuevoEle.class.getName()).log(Level.SEVERE, null, ex);
             }

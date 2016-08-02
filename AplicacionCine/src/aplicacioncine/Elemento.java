@@ -29,8 +29,8 @@ public class Elemento {
     private JPanel panelElemento;
     boolean activado;
     InterfazElemento interfaz;
-   
-    public Elemento(int idEle,String nom,String img,boolean tipoElemento) throws IOException{
+    
+    public Elemento(int idEle,String nom,String img,boolean tipoElemento,Application linker) throws IOException{
         nombre=nom;
         imagen=img;
         id=idEle;
@@ -61,7 +61,7 @@ public class Elemento {
                     
                     try {
                         if(interfaz==null || interfaz.isClose()){
-                            interfaz=new InterfazElemento(id,salida);
+                            interfaz=new InterfazElemento(id,salida,linker);
                             interfaz.setVisible(true);
                         }
                     } catch (SQLException ex) {

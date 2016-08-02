@@ -69,8 +69,8 @@ public class Application {
         int numElementosSeries=numRows("SERIES","");
         
         //Añadimos los elementos al CardLayout   |      Seleccionamos las peliculas de nuestra base de datos                    //true para peliculas
-        ListaElementos elementosPeliculas = new ListaElementos(baseDatos.select("SELECT * FROM PELICULAS ORDER BY nombre DESC;"),numElementosPeli,true);
-        ListaElementos elementosSeries = new ListaElementos(baseDatos.select("SELECT * FROM SERIES ORDER BY nombre DESC;"),numElementosSeries,false);                                                                                                                   //false para peliculas      
+        ListaElementos elementosPeliculas = new ListaElementos(baseDatos.select("SELECT * FROM PELICULAS ORDER BY nombre DESC;"),numElementosPeli,true,apliLinker);
+        ListaElementos elementosSeries = new ListaElementos(baseDatos.select("SELECT * FROM SERIES ORDER BY nombre DESC;"),numElementosSeries,false,apliLinker);                                                                                                                   //false para peliculas      
         
         //Añadimos las cartas
         cards.add(elementosPeliculas, "peliculas");
@@ -262,7 +262,7 @@ public class Application {
              //Para poder actualizar la informacion debemos cargar los elementos en tiempo de ejecucion
              int numElementos = numRows(tabla, "WHERE "+condicion);
              //Creamos al lista de elementos
-             ListaElementos elementos = new ListaElementos(baseDatos.select("SELECT * FROM "+tabla+" WHERE "+condicion+" ORDER BY nombre DESC;"), numElementos, tipoElemento);
+             ListaElementos elementos = new ListaElementos(baseDatos.select("SELECT * FROM "+tabla+" WHERE "+condicion+" ORDER BY nombre DESC;"), numElementos, tipoElemento,apliLinker);
              //Realizamos la cards con esos elementos
              cards.add(elementos, "elementos");
              cardLayout.show(cards, "elementos");//Mostramos la nueva cards
@@ -286,12 +286,12 @@ public class Application {
         
         if(tabla.equals("peliculas")){
             //Añadimos los elementos al CardLayout   |      Seleccionamos las peliculas de nuestra base de datos                    //true para peliculas
-            ListaElementos elementosPeliculas = new ListaElementos(baseDatos.select("SELECT * FROM PELICULAS ORDER BY nombre DESC;"),numElementos,true);
+            ListaElementos elementosPeliculas = new ListaElementos(baseDatos.select("SELECT * FROM PELICULAS ORDER BY nombre DESC;"),numElementos,true,apliLinker);
             cards.add(elementosPeliculas, "peliculas");
             cardLayout.show(cards, "peliculas");
         }
         else{
-            ListaElementos elementosSeries = new ListaElementos(baseDatos.select("SELECT * FROM SERIES ORDER BY nombre DESC;"),numElementos,false);    
+            ListaElementos elementosSeries = new ListaElementos(baseDatos.select("SELECT * FROM SERIES ORDER BY nombre DESC;"),numElementos,false,apliLinker);    
             cards.add(elementosSeries, "series");
             cardLayout.show(cards, "series");
         }

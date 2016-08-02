@@ -26,7 +26,7 @@ public class ListaElementos extends JPanel{
      private JPanel mainList;
      private boolean tipoElem;
         private ArrayList<String> peliculas;
-        public ListaElementos(ResultSet lista,int tamTotal,boolean tipoElemento) throws IOException, SQLException{
+        public ListaElementos(ResultSet lista,int tamTotal,boolean tipoElemento,Application linker) throws IOException, SQLException{
             int elemPorFila=9; //numero de elementos por cada fila
             tipoElem=tipoElemento;
             
@@ -62,7 +62,7 @@ public class ListaElementos extends JPanel{
             while(lista.next()){
                 //mientras no este la linea completa
                 if(peliActualFila!=elemPorFila){
-                        panel.add((new Elemento(lista.getInt("id") ,lista.getString("nombre"),lista.getString("imagen"),tipoElem)).getelemento(),0);
+                        panel.add((new Elemento(lista.getInt("id") ,lista.getString("nombre"),lista.getString("imagen"),tipoElem,linker)).getelemento(),0);
                         peliActualFila++;
                 }
                 

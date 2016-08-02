@@ -1,7 +1,9 @@
 
 package aplicacioncine;
 
+import java.awt.Color;
 import java.awt.Image;
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -19,14 +21,16 @@ public class InterfazElemento extends javax.swing.JFrame {
     String nombre,imagen,descripcion;
     boolean vista,pendiente,close;
     String tabla;
-            
-    public InterfazElemento(int  id_elem,String tabl) throws SQLException {
+    Application link;      
+    
+    public InterfazElemento(int  id_elem,String tabl,Application linker) throws SQLException {
         initComponents();
         //Cambiamos la configuracion al cerrar la ventana
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         baseDatos=new DataBase(); //Realizamos la conexion a la base de datos
         tabla=tabl;
         close=false;
+        link=linker;
         //Realizamos un select del objeto seleccionado para obtener su información
         ResultSet salida=baseDatos.select("select * FROM "+tabla+" WHERE id="+id_elem+";");
         salida.next();
@@ -51,6 +55,9 @@ public class InterfazElemento extends javax.swing.JFrame {
         jLabel5.setText(nombre);
         jLabel6.setText(""+anio);
         jLabel7.setText(descripcion);
+        eliminar.setBackground(Color.red);
+        eliminar.setFocusPainted(false);
+        
         if(vista){
             desactivarVista();
         }
@@ -83,6 +90,7 @@ public class InterfazElemento extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JSeparator();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        eliminar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(215, 215, 240));
@@ -146,6 +154,14 @@ public class InterfazElemento extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        eliminar.setBackground(new java.awt.Color(255, 0, 0));
+        eliminar.setText("Eliminar");
+        eliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                eliminarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -153,18 +169,24 @@ public class InterfazElemento extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(52, 52, 52)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel3)
+                        .addGap(52, 52, 52)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel6))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel5))
+                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 458, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel6))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel5))
-                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 458, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4)))
+                        .addComponent(eliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(20, 20, 20))))
             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
@@ -180,7 +202,9 @@ public class InterfazElemento extends javax.swing.JFrame {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(87, 87, 87)
+                .addContainerGap()
+                .addComponent(eliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(40, 40, 40)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(jLabel5))
@@ -264,10 +288,20 @@ public class InterfazElemento extends javax.swing.JFrame {
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
     }//GEN-LAST:event_formWindowClosed
+
+    private void eliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eliminarActionPerformed
+        DataBase baseDatos=new DataBase();
+        try {
+            baseDatos.operacion("DELETE FROM "+tabla+ " WHERE id="+id+";");
+            baseDatos.cerrarConexion();
+            link.ActualizarCarta(tabla);
+        } catch (SQLException ex) {Logger.getLogger(InterfazElemento.class.getName()).log(Level.SEVERE, null, ex);} 
+        catch (IOException ex) {Logger.getLogger(InterfazElemento.class.getName()).log(Level.SEVERE, null, ex);}
+        this.dispose();
+        close=true;
+        
+    }//GEN-LAST:event_eliminarActionPerformed
     
-    public void cerrarVentana(){
-        this.dispose(); 
-    }
     public boolean isClose(){
         return close;
     }
@@ -290,6 +324,7 @@ public class InterfazElemento extends javax.swing.JFrame {
         jButton3.setText("Quitar de pendientes");
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton eliminar;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
