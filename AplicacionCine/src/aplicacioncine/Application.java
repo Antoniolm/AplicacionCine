@@ -60,25 +60,12 @@ public class Application {
         
         //Añadimos los elementos al CardLayout   |      Seleccionamos las peliculas de nuestra base de datos                    //true para peliculas
         ListaElementos elementosPeliculas = new ListaElementos(baseDatos.select("SELECT * FROM PELICULAS ORDER BY nombre DESC;"),numElementosPeli,true);
-        ListaElementos elementosSeries = new ListaElementos(baseDatos.select("SELECT * FROM SERIES ORDER BY nombre DESC;"),numElementosSeries,false);
-                                                                                                                            //false para peliculas
-        //Creamos 4 elementos mas, 2 por cada tipo de elemento
-        numElementosPeli=numRows("PELICULAS","WHERE vista=1");
-        ListaElementos elementosPeliVistas = new ListaElementos(baseDatos.select("SELECT * FROM PELICULAS WHERE vista=1 ORDER BY nombre DESC;"),numElementosPeli,true);
-        numElementosPeli=numRows("PELICULAS","WHERE pendiente=1");
-        ListaElementos elementosPeliPendiente = new ListaElementos(baseDatos.select("SELECT * FROM PELICULAS WHERE pendiente=1 ORDER BY nombre DESC;"),numElementosPeli,true);
-        numElementosSeries=numRows("SERIES","WHERE vista=1");
-        ListaElementos elementosSeriesVistas = new ListaElementos(baseDatos.select("SELECT * FROM SERIES WHERE vista=1 ORDER BY nombre DESC;"),numElementosSeries,false);
-        numElementosSeries=numRows("SERIES","WHERE pendiente=1");
-        ListaElementos elementosSeriesPendiente = new ListaElementos(baseDatos.select("SELECT * FROM SERIES WHERE pendiente=1 ORDER BY nombre DESC;"),numElementosSeries,false);
+        ListaElementos elementosSeries = new ListaElementos(baseDatos.select("SELECT * FROM SERIES ORDER BY nombre DESC;"),numElementosSeries,false);                                                                                                                   //false para peliculas      
         
         //Añadimos las cartas
         cards.add(elementosPeliculas, "peliculas");
         cards.add(elementosSeries, "series");
-        cards.add(elementosPeliVistas,"pelisVistas");
-        cards.add(elementosPeliPendiente,"pelisPendi");
-        cards.add(elementosSeriesVistas,"seriesVistas");
-        cards.add(elementosSeriesPendiente,"seriesPendi");
+        
         //Visualizamos el cards que contiene las peliculas
         cardLayout.show(cards, "peliculas");
         tipoActivado=true;
@@ -163,16 +150,56 @@ public class Application {
         botonVistas.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(tipoActivado)cardLayout.show(cards, "pelisVistas");
-                else cardLayout.show(cards,"seriesVistas");
+                if(tipoActivado){
+                    try {
+                        //Para poder actualizar la informacion debemos cargar los elementos en tiempo de ejecucion
+                        int numElementosPeli=numRows("PELICULAS","WHERE vista=1");
+                        ListaElementos elementosPeliVistas = new ListaElementos(baseDatos.select("SELECT * FROM PELICULAS WHERE vista=1 ORDER BY nombre DESC;"),numElementosPeli,true);
+                        cards.add(elementosPeliVistas,"pelisVistas");
+                        cardLayout.show(cards, "pelisVistas");
+                    
+                    } catch (SQLException ex ) { Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);}
+                    catch (IOException ex) { Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);}
+
+                }
+                else{
+                    try {
+                        int numElementosSeries = numRows("SERIES","WHERE vista=1");
+                        ListaElementos elementosSeriesVistas = new ListaElementos(baseDatos.select("SELECT * FROM SERIES WHERE vista=1 ORDER BY nombre DESC;"),numElementosSeries,false);
+                        cards.add(elementosSeriesVistas,"seriesVistas");
+                        cardLayout.show(cards,"seriesVistas");
+                    } catch (SQLException ex) {Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);}
+                    catch (IOException ex) {Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);}
+
+                }
             }
         });
+        
+        
         JButton botonPen = new JButton("Pendientes");
         botonPen.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(tipoActivado)cardLayout.show(cards, "pelisPendi");
-                else cardLayout.show(cards,"seriesPendi");
+                if(tipoActivado){
+                    try {
+                        int numElementosPeli = numRows("PELICULAS","WHERE pendiente=1");
+                        ListaElementos elementosPeliPendiente = new ListaElementos(baseDatos.select("SELECT * FROM PELICULAS WHERE pendiente=1 ORDER BY nombre DESC;"),numElementosPeli,true);
+                        cards.add(elementosPeliPendiente,"pelisPendi");
+                        cardLayout.show(cards, "pelisPendi");
+                    } catch (SQLException ex) {Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);}
+                    catch (IOException ex) {Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);}
+                    
+                }
+                else{
+                    try {
+                        int numElementosSeries = numRows("SERIES","WHERE pendiente=1");
+                         ListaElementos elementosSeriesPendiente = new ListaElementos(baseDatos.select("SELECT * FROM SERIES WHERE pendiente=1 ORDER BY nombre DESC;"),numElementosSeries,false);
+                         cards.add(elementosSeriesPendiente,"seriesPendi");
+                         cardLayout.show(cards,"seriesPendi");
+                    } catch (SQLException ex) {Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);}
+                    catch (IOException ex) {Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);}
+                   
+                }
             }
         });
         

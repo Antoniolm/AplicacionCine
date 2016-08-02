@@ -58,7 +58,6 @@ public class ListaElementos extends JPanel{
             int restoElementos=tamTotal%elemPorFila;
             JPanel panel = new JPanel();
             panel.setBackground(new Color(215,215,240));
-            System.out.println("resto:" + restoElementos);
             //Recorremos el numero de elementos
             while(lista.next()){
                 //mientras no este la linea completa
@@ -77,8 +76,6 @@ public class ListaElementos extends JPanel{
                     panel.setBackground(new Color(215,215,240));
                 }
                 totalActual++;
-                if(totalActual==restoElementos-1)
-                    System.out.println("totalActual : "+totalActual);
             };
             
             validate();
