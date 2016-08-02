@@ -40,9 +40,16 @@ public class Application {
                          // de Todas,vistas y pendientes
     private JPanel cards;
     CardLayout cardLayout;
+    //estado nos permitira saber en que seccion estamos 
+    int estado; // 0=todas , 1=vistas, 2=pendientes
+    
     
     public Application() throws IOException, SQLException{
+        //Inicializamos variables
+        tipoActivado=true;
+        estado=0;
         
+        //Creamos nuestra ventana principal
         final JFrame frame = new JFrame("Aplicación de cine y series");
         //Este jpanel nos servira para hacer despues el cambio de cards(una para pelis y otra para series)
         cardLayout= new CardLayout();
@@ -70,8 +77,7 @@ public class Application {
         
         //Visualizamos el cards que contiene las peliculas
         cardLayout.show(cards, "peliculas");
-        tipoActivado=true;
-        
+       
         //Panel donde se añadiran todos los botones principales
         panelbotones.setLayout(new BoxLayout(panelbotones, BoxLayout.Y_AXIS));
 
@@ -82,7 +88,9 @@ public class Application {
             @Override
             public void actionPerformed(ActionEvent e) {
                 cardLayout.show(cards, "peliculas");
+                //Cambiamos el estado
                 tipoActivado=true;
+                estado=0;
             }
         });
         
@@ -93,7 +101,9 @@ public class Application {
             @Override
             public void actionPerformed(ActionEvent e) {
                 cardLayout.show(cards, "series");
+                //Cambiamos el estado
                 tipoActivado=false;
+                estado=0;
             }
         });
         
@@ -133,25 +143,15 @@ public class Application {
             public void actionPerformed(ActionEvent e) {
                 //System.out.println("Prueba de campo "+campobus.getText());
                 String result=campobus.getText();
-                    if (tipoActivado) {
-                        try {
-                            int numElementosPeli = numRows("PELICULAS","WHERE nombre LIKE '%"+result+"%'"); 
-                            ListaElementos elementosPeliBus = new ListaElementos(baseDatos.select("SELECT * FROM PELICULAS WHERE nombre LIKE '%"+result+"%' ORDER BY nombre DESC;"),numElementosPeli,true);
-                            cards.add(elementosPeliBus, "Busqueda");
 
-                        } catch (SQLException ex) {Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);}
-                        catch (IOException ex) {Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);}
-                       
-                    } else {
-                        try {
-                            int numElementosSeries = numRows("SERIES","WHERE nombre LIKE '%"+result+"%'");
-                            ListaElementos elementosSerieBus = new ListaElementos(baseDatos.select("SELECT * FROM SERIES WHERE nombre LIKE '%"+result+"%' ORDER BY nombre DESC;"),numElementosSeries,true);
-                            cards.add(elementosSerieBus, "Busqueda");
-                        } catch (SQLException ex) {Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);}
-                        catch (IOException ex) {Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);}
-                        
-                    }
-                cardLayout.show(cards, "Busqueda");
+                String condicion = "";
+                if (estado == 1) //comprobamos si esta en la zona de vistas
+                    condicion = "AND vista=1";
+                if (estado == 2) //comprobamos si esta en la zona de pendientes
+                    condicion = "AND pendiente=1";
+
+                //Creamos una nueva carta
+                crearCarta(tipoActivado, "nombre LIKE '%" + result + "%' " + condicion);
             }
         });
 
@@ -171,6 +171,8 @@ public class Application {
             public void actionPerformed(ActionEvent e) {
                 if(tipoActivado)cardLayout.show(cards, "peliculas");
                 else cardLayout.show(cards,"series");
+                //Cambiamos el estado
+                estado=0;
                 
             }
         });
@@ -182,7 +184,9 @@ public class Application {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //Creamos la carta y la visualizamos
-                crearCarta(tipoActivado,true);
+                crearCarta(tipoActivado,"vista=1");
+                //Cambiamos el estado
+                estado=1;
             }
         });
         
@@ -192,7 +196,9 @@ public class Application {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //Creamos la carta y la visualizamos
-                crearCarta(tipoActivado,false);
+                crearCarta(tipoActivado,"pendiente=1");
+                //Cambiamos el estado
+                estado=2;
             }
         });
         
@@ -232,24 +238,18 @@ public class Application {
       * @param tipoElemento nos permite conocer que tipo de elemento tendremos(pelicula o serie)
       * @param isVista nos permite conocer si estamos en vista o en pendientes
       */
-     
-     public void crearCarta(boolean tipoElemento,boolean isVista){
-        String tabla,condicion;
+     public void crearCarta(boolean tipoElemento,String condicion){
+        String tabla;
 
         //Obtenemos sobre que tabla buscaremos
         if(tipoElemento)tabla="peliculas"; 
-        else tabla="series";
-
-        //Obtenemos que condicion tendra nuestro select
-        if(isVista)condicion="vista";
-        else condicion="pendiente";
+        else tabla="series";     
      
-     
-         try {
+        try {
              //Para poder actualizar la informacion debemos cargar los elementos en tiempo de ejecucion
-             int numElementos = numRows(tabla, "WHERE "+condicion+"=1");
+             int numElementos = numRows(tabla, "WHERE "+condicion);
              //Creamos al lista de elementos
-             ListaElementos elementos = new ListaElementos(baseDatos.select("SELECT * FROM "+tabla+" WHERE "+condicion+"=1 ORDER BY nombre DESC;"), numElementos, tipoElemento);
+             ListaElementos elementos = new ListaElementos(baseDatos.select("SELECT * FROM "+tabla+" WHERE "+condicion+" ORDER BY nombre DESC;"), numElementos, tipoElemento);
              //Realizamos la cards con esos elementos
              cards.add(elementos, "elementos");
              cardLayout.show(cards, "elementos");//Mostramos la nueva cards
