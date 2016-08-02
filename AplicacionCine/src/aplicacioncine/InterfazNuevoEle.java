@@ -32,6 +32,7 @@ public class InterfazNuevoEle extends javax.swing.JFrame {
     public InterfazNuevoEle(Application apli) {
         initComponents();
         this.setTitle("Nuevo elemento");
+        setLocation(200,200);
         isAñadida=false;
         close=false;
         aplicacion=apli;

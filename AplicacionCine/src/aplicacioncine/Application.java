@@ -44,6 +44,7 @@ public class Application {
     int estado; // 0=todas , 1=vistas, 2=pendientes
     InterfazNuevoEle nuevoElemento;
     Application apliLinker;
+    final JTextField campobus;
     
     public Application() throws IOException, SQLException{
         //Inicializamos variables
@@ -110,8 +111,8 @@ public class Application {
         
         //Añadimos dos nuevos botones para vistas y peliculas
         //a determinar
-        JButton botonNuevaPelicula = new JButton("Añadir Pelicula");
-        botonNuevaPelicula.setBounds(new Rectangle(0,240,150,40));
+        JButton botonNuevaPelicula = new JButton("Añadir Elemento");
+        botonNuevaPelicula.setBounds(new Rectangle(0,160,150,40));
         botonNuevaPelicula.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -124,13 +125,10 @@ public class Application {
         
         
         
-        JButton botonNuevaSeries = new JButton("Añadir Serie");
-        botonNuevaSeries.setBounds(new Rectangle(0,280,150,40));
         //Añadimos los botones al panel
         panelbotones.add(botonPeliculas);
         panelbotones.add(botonSeries);
         panelbotones.add(botonNuevaPelicula);
-        panelbotones.add(botonNuevaSeries);
         //Añadimos a la interfaz el panel de botones
         Dimension dimPanelBoton =new Dimension(150,80);
         panelbotones.setPreferredSize(dimPanelBoton);
@@ -148,23 +146,21 @@ public class Application {
         //Buscador.setLayout(null);
 
         //Campo de texto para realizar la busqueda
-        final JTextField campobus = new JTextField(20);
+        campobus = new JTextField(20);
+        campobus.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //realizamos el metodo de busqueda
+                busqueda();
+            }
+        });
         //Boton para realizar la busqueda
         JButton botonbuscar = new JButton("Buscar");
         botonbuscar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //System.out.println("Prueba de campo "+campobus.getText());
-                String result=campobus.getText();
-
-                String condicion = "";
-                if (estado == 1) //comprobamos si esta en la zona de vistas
-                    condicion = "AND vista=1";
-                if (estado == 2) //comprobamos si esta en la zona de pendientes
-                    condicion = "AND pendiente=1";
-
-                //Creamos una nueva carta
-                crearCarta(tipoActivado, "nombre LIKE '%" + result + "%' " + condicion);
+                //Realizamos el metodo de busqueda
+                busqueda();
             }
         });
 
@@ -298,4 +294,20 @@ public class Application {
         
      
      }
+     
+    /**
+     * Metodo que nos permite realizar una busqueda de un elemento
+     */
+    public void busqueda(){
+        String result = campobus.getText();
+
+        String condicion = "";
+        if (estado == 1) //comprobamos si esta en la zona de vistas
+            condicion = "AND vista=1";
+        if (estado == 2) //comprobamos si esta en la zona de pendientes
+            condicion = "AND pendiente=1";
+        //Creamos una nueva carta
+        crearCarta(tipoActivado, "nombre LIKE '%" + result + "%' " + condicion);
+    
+    }
 }

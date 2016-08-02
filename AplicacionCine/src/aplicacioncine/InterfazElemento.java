@@ -3,11 +3,16 @@ package aplicacioncine;
 
 import java.awt.Color;
 import java.awt.Image;
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
@@ -27,6 +32,9 @@ public class InterfazElemento extends javax.swing.JFrame {
         initComponents();
         //Cambiamos la configuracion al cerrar la ventana
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setLocation(200,200);
+        this.setTitle("Información del elemento");
+                
         baseDatos=new DataBase(); //Realizamos la conexion a la base de datos
         tabla=tabl;
         close=false;
@@ -54,8 +62,10 @@ public class InterfazElemento extends javax.swing.JFrame {
         jLabel1.setIcon(imagenIcon);
         jLabel5.setText(nombre);
         jLabel6.setText(""+anio);
-        jLabel7.setText(descripcion);
-        eliminar.setBackground(Color.red);
+        jTextPane1.setText(descripcion);
+        jTextPane1.setEditable(false);
+        jTextPane1.setBorder(BorderFactory.createEmptyBorder());
+        eliminar.setBackground(new Color(200,20,20));
         eliminar.setFocusPainted(false);
         
         if(vista){
@@ -78,19 +88,24 @@ public class InterfazElemento extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTextPane2 = new javax.swing.JTextPane();
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         eliminar = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextPane1 = new javax.swing.JTextPane();
+
+        jScrollPane2.setViewportView(jTextPane2);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(215, 215, 240));
@@ -114,8 +129,6 @@ public class InterfazElemento extends javax.swing.JFrame {
         jLabel5.setText("jLabel5");
 
         jLabel6.setText("jLabel6");
-
-        jLabel7.setText("jLabel7");
 
         jButton2.setText("Añadir a vistas");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -162,6 +175,10 @@ public class InterfazElemento extends javax.swing.JFrame {
             }
         });
 
+        jTextPane1.setBackground(new java.awt.Color(215, 215, 240));
+        jTextPane1.setBorder(null);
+        jScrollPane1.setViewportView(jTextPane1);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -170,6 +187,10 @@ public class InterfazElemento extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(eliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(20, 20, 20))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(52, 52, 52)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -181,12 +202,9 @@ public class InterfazElemento extends javax.swing.JFrame {
                                 .addComponent(jLabel2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jLabel5))
-                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 458, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(eliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(20, 20, 20))))
+                            .addComponent(jLabel4)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 434, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(37, 37, 37))))
             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
@@ -214,9 +232,9 @@ public class InterfazElemento extends javax.swing.JFrame {
                     .addComponent(jLabel6))
                 .addGap(18, 18, 18)
                 .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 121, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -264,6 +282,7 @@ public class InterfazElemento extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         try {
             int valor;
+            //Configuramos el cambio de disponibilidad de botones
             if(vista){
                 valor=0;
                 activarVista();
@@ -275,7 +294,9 @@ public class InterfazElemento extends javax.swing.JFrame {
                 vista=true; 
             }
             baseDatos=new DataBase();
+            //realizamos el update
             baseDatos.operacion("UPDATE "+tabla+" SET vista="+valor+" WHERE id="+id+";");
+            baseDatos.cerrarConexion();
         } catch (SQLException ex) {
             Logger.getLogger(InterfazElemento.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -292,8 +313,14 @@ public class InterfazElemento extends javax.swing.JFrame {
     private void eliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eliminarActionPerformed
         DataBase baseDatos=new DataBase();
         try {
+            //Borramos el elemento de la base de datos
             baseDatos.operacion("DELETE FROM "+tabla+ " WHERE id="+id+";");
-            baseDatos.cerrarConexion();
+            baseDatos.cerrarConexion(); //cerramos conexion
+            //Eliminamos la foto del directorio
+            Path path=Paths.get(new File(".").getAbsolutePath()+"/imgs/"+imagen);
+            Files.delete(path);
+            
+            //Actualizamos la carta de elementos 
             link.ActualizarCarta(tabla);
         } catch (SQLException ex) {Logger.getLogger(InterfazElemento.class.getName()).log(Level.SEVERE, null, ex);} 
         catch (IOException ex) {Logger.getLogger(InterfazElemento.class.getName()).log(Level.SEVERE, null, ex);}
@@ -333,9 +360,12 @@ public class InterfazElemento extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JTextPane jTextPane1;
+    private javax.swing.JTextPane jTextPane2;
     // End of variables declaration//GEN-END:variables
 }
