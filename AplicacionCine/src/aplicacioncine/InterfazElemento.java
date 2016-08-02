@@ -41,7 +41,7 @@ public class InterfazElemento extends javax.swing.JFrame {
         pendiente=salida.getBoolean("pendiente");
         
         //Creamos la imagen que se pondra en la interfaz        
-        ImageIcon imagenIcon= new ImageIcon("imgs/"+imagen+".jpg");
+        ImageIcon imagenIcon= new ImageIcon("imgs/"+imagen);
         Image image = imagenIcon.getImage(); // transform it
         Image newimg = image.getScaledInstance(140, 192,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way 
         imagenIcon = new ImageIcon(newimg);  // transform it back        
