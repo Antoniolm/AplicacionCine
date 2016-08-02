@@ -39,11 +39,13 @@ public class Application {
     boolean tipoActivado; //boolean para saber que card utilizar al pulsar los botones
                          // de Todas,vistas y pendientes
     private JPanel cards;
+    CardLayout cardLayout;
+    
     public Application() throws IOException, SQLException{
         
         final JFrame frame = new JFrame("Aplicación de cine y series");
         //Este jpanel nos servira para hacer despues el cambio de cards(una para pelis y otra para series)
-        CardLayout cardLayout= new CardLayout();
+        cardLayout= new CardLayout();
         cards = new JPanel(cardLayout);
         Dimension dm = new Dimension(1250, 800);
         frame.setPreferredSize(dm);
@@ -126,7 +128,32 @@ public class Application {
         final JTextField campobus = new JTextField(20);
         //Boton para realizar la busqueda
         JButton botonbuscar = new JButton("Buscar");
-        
+        botonbuscar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //System.out.println("Prueba de campo "+campobus.getText());
+                String result=campobus.getText();
+                    if (tipoActivado) {
+                        try {
+                            int numElementosPeli = numRows("PELICULAS","WHERE nombre LIKE '%"+result+"%'"); 
+                            ListaElementos elementosPeliBus = new ListaElementos(baseDatos.select("SELECT * FROM PELICULAS WHERE nombre LIKE '%"+result+"%' ORDER BY nombre DESC;"),numElementosPeli,true);
+                            cards.add(elementosPeliBus, "Busqueda");
+
+                        } catch (SQLException ex) {Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);}
+                        catch (IOException ex) {Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);}
+                       
+                    } else {
+                        try {
+                            int numElementosSeries = numRows("SERIES","WHERE nombre LIKE '%"+result+"%'");
+                            ListaElementos elementosSerieBus = new ListaElementos(baseDatos.select("SELECT * FROM SERIES WHERE nombre LIKE '%"+result+"%' ORDER BY nombre DESC;"),numElementosSeries,true);
+                            cards.add(elementosSerieBus, "Busqueda");
+                        } catch (SQLException ex) {Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);}
+                        catch (IOException ex) {Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);}
+                        
+                    }
+                cardLayout.show(cards, "Busqueda");
+            }
+        });
 
        //Añadimos ambos elementos al buscador y añadimos el buscador a la interfaz
         Buscador.add(campobus);
@@ -138,6 +165,7 @@ public class Application {
 
         //Creamos los botones 
         JButton botonTodas = new JButton("Todas");
+        //Añadimos la funcionalidad al boton
         botonTodas.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -146,60 +174,25 @@ public class Application {
                 
             }
         });
+        
+        //Creamos el boton de vista
         JButton botonVistas = new JButton("Vistas");
+        //Añadimos la funcionalidad al boton
         botonVistas.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(tipoActivado){
-                    try {
-                        //Para poder actualizar la informacion debemos cargar los elementos en tiempo de ejecucion
-                        int numElementosPeli=numRows("PELICULAS","WHERE vista=1");
-                        ListaElementos elementosPeliVistas = new ListaElementos(baseDatos.select("SELECT * FROM PELICULAS WHERE vista=1 ORDER BY nombre DESC;"),numElementosPeli,true);
-                        cards.add(elementosPeliVistas,"pelisVistas");
-                        cardLayout.show(cards, "pelisVistas");
-                    
-                    } catch (SQLException ex ) { Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);}
-                    catch (IOException ex) { Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);}
-
-                }
-                else{
-                    try {
-                        int numElementosSeries = numRows("SERIES","WHERE vista=1");
-                        ListaElementos elementosSeriesVistas = new ListaElementos(baseDatos.select("SELECT * FROM SERIES WHERE vista=1 ORDER BY nombre DESC;"),numElementosSeries,false);
-                        cards.add(elementosSeriesVistas,"seriesVistas");
-                        cardLayout.show(cards,"seriesVistas");
-                    } catch (SQLException ex) {Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);}
-                    catch (IOException ex) {Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);}
-
-                }
+                //Creamos la carta y la visualizamos
+                crearCarta(tipoActivado,true);
             }
         });
         
-        
+        //Creamos el boton de pendientes
         JButton botonPen = new JButton("Pendientes");
         botonPen.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(tipoActivado){
-                    try {
-                        int numElementosPeli = numRows("PELICULAS","WHERE pendiente=1");
-                        ListaElementos elementosPeliPendiente = new ListaElementos(baseDatos.select("SELECT * FROM PELICULAS WHERE pendiente=1 ORDER BY nombre DESC;"),numElementosPeli,true);
-                        cards.add(elementosPeliPendiente,"pelisPendi");
-                        cardLayout.show(cards, "pelisPendi");
-                    } catch (SQLException ex) {Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);}
-                    catch (IOException ex) {Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);}
-                    
-                }
-                else{
-                    try {
-                        int numElementosSeries = numRows("SERIES","WHERE pendiente=1");
-                         ListaElementos elementosSeriesPendiente = new ListaElementos(baseDatos.select("SELECT * FROM SERIES WHERE pendiente=1 ORDER BY nombre DESC;"),numElementosSeries,false);
-                         cards.add(elementosSeriesPendiente,"seriesPendi");
-                         cardLayout.show(cards,"seriesPendi");
-                    } catch (SQLException ex) {Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);}
-                    catch (IOException ex) {Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);}
-                   
-                }
+                //Creamos la carta y la visualizamos
+                crearCarta(tipoActivado,false);
             }
         });
         
@@ -230,5 +223,42 @@ public class Application {
         tam.next();
         salida = (int) tam.getLong(1);
         return salida;
+     }
+     
+     /**
+      * Metodo que nos permite crear nuevas cartas de forma modular para visualizar los
+      * elementoos vistos o pendientes de ambos tipos de elementos(peliculas y series)
+      * 
+      * @param tipoElemento nos permite conocer que tipo de elemento tendremos(pelicula o serie)
+      * @param isVista nos permite conocer si estamos en vista o en pendientes
+      */
+     
+     public void crearCarta(boolean tipoElemento,boolean isVista){
+        String tabla,condicion;
+
+        //Obtenemos sobre que tabla buscaremos
+        if(tipoElemento)tabla="peliculas"; 
+        else tabla="series";
+
+        //Obtenemos que condicion tendra nuestro select
+        if(isVista)condicion="vista";
+        else condicion="pendiente";
+     
+     
+         try {
+             //Para poder actualizar la informacion debemos cargar los elementos en tiempo de ejecucion
+             int numElementos = numRows(tabla, "WHERE "+condicion+"=1");
+             //Creamos al lista de elementos
+             ListaElementos elementos = new ListaElementos(baseDatos.select("SELECT * FROM "+tabla+" WHERE "+condicion+"=1 ORDER BY nombre DESC;"), numElementos, tipoElemento);
+             //Realizamos la cards con esos elementos
+             cards.add(elementos, "elementos");
+             cardLayout.show(cards, "elementos");//Mostramos la nueva cards
+         } catch (SQLException ex) {
+             Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);
+         } catch (IOException ex) {
+             Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);
+         }
+     
+     
      }
 }
