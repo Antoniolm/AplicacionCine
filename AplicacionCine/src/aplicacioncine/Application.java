@@ -42,7 +42,7 @@ public class Application {
     CardLayout cardLayout;
     //estado nos permitira saber en que seccion estamos 
     int estado; // 0=todas , 1=vistas, 2=pendientes
-    
+    InterfazNuevoEle nuevoElemento;
     
     public Application() throws IOException, SQLException{
         //Inicializamos variables
@@ -111,6 +111,18 @@ public class Application {
         //a determinar
         JButton botonNuevaPelicula = new JButton("Añadir Pelicula");
         botonNuevaPelicula.setBounds(new Rectangle(0,240,150,40));
+        botonNuevaPelicula.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(nuevoElemento==null || nuevoElemento.isClose()){
+                    nuevoElemento=new InterfazNuevoEle();
+                    nuevoElemento.setVisible(true);
+                }
+            }
+        });
+        
+        
+        
         JButton botonNuevaSeries = new JButton("Añadir Serie");
         botonNuevaSeries.setBounds(new Rectangle(0,280,150,40));
         //Añadimos los botones al panel

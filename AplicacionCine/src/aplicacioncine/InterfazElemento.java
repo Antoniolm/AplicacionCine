@@ -125,7 +125,9 @@ public class InterfazElemento extends javax.swing.JFrame {
 
         jPanel2.setBackground(new java.awt.Color(119, 119, 230));
 
-        jLabel1.setText("jLabel1");
+        jLabel1.setText("           Imagen");
+        jLabel1.setToolTipText("");
+        jLabel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
