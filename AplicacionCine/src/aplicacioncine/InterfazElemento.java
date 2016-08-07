@@ -39,6 +39,7 @@ public class InterfazElemento extends javax.swing.JFrame {
         tabla=tabl;
         close=false;
         link=linker;
+        
         //Realizamos un select del objeto seleccionado para obtener su información
         ResultSet salida=baseDatos.select("select * FROM "+tabla+" WHERE id="+id_elem+";");
         salida.next();
